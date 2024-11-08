@@ -1,0 +1,25 @@
+import numpy as np
+
+# User input
+pl_exponent = list(map(int, input('Enter Path Loss exponent with space in between (e.g., 4 3): ').split()))  # Such as 4 3
+r_si = 15  # Minimum Required S/I in dB
+i0 = 6     # The number of Co-channel interfering cells
+
+for n in pl_exponent:
+    N = 7  # Initial cluster size
+    Q = np.sqrt(3 * N)  # Frequency reuse factor
+    si = 10 * np.log10((Q**n) / i0)  # Signal to interference ratio in dB
+
+    # If the first condition is not satisfied
+    if si < r_si:
+        i, j = 2, 2
+        N = (i * i) + (i * j) + (j * j)
+        Q = np.sqrt(3 * N)
+        si = 10 * np.log10((Q**n) / i0)
+
+    # Print results
+    print(f'For Path Loss Exponent, n = {n}')
+    print('---------------------------')
+    print(f'Signal-to-Interference Ratio S/I: {si:.3f} dB > {r_si} dB')
+    print(f'Hence, Cluster size N: {N}')
+    print(f'Frequency Reuse Factor Q: {Q:.3f}\n\n')
